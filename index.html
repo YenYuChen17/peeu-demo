@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PeeU 雛形</title>
+<style>
+:root{--bg:#fff;--surf:#f3f7fa;--ink:#2b3a45;--mute:#6d7f8c;--blue:#7ba3bd;--deep:#3f5f73;--gold:#e8d191;--goldink:#5a4a14;--line:#dbe5ec;--ok:#4a8a63;--warn:#b5532f;--map:#f7f1e3;--road:#fffdf7;--green:#e3ead2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16222b;--surf:#1f2f3b;--ink:#e6eef3;--mute:#9bb0be;--deep:#a9c8dc;--line:#2f4352;--goldink:#2e260a}}
+html,body{height:100%;margin:0;background:var(--surf)}
+body{font-family:"Zen Maru Gothic","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--ink);line-height:1.5}
+*{box-sizing:border-box}button{font:inherit;color:inherit;cursor:pointer}
+#app{max-width:430px;height:100%;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.scr{flex:1;overflow-y:auto;display:flex;flex-direction:column}.scr>*{flex-shrink:0}
+.splash{align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px}
+.drop{width:190px;height:230px;background:var(--blue);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;display:grid;place-items:center;transform:rotate(0)}
+.splash h1{font-size:54px;margin:4px 0 14px;color:var(--deep);letter-spacing:2px}
+.btn{border:0;border-radius:10px;padding:14px 18px;background:var(--gold);color:var(--goldink);font-weight:700;font-size:17px;min-height:48px}
+.btn.s{background:var(--surf);color:var(--deep);border:1px solid var(--line)}
+.btn.w{width:100%}.row{display:flex;gap:10px}.row>*{flex:1}
+.top{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.top h2{margin:0;font-size:18px;flex:1}
+.ib{border:0;background:var(--surf);border-radius:10px;width:40px;height:40px;font-size:18px}
+.pad{padding:16px}
+input,textarea{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin:4px 0 12px}
+label{font-size:14px;color:var(--mute)}
+.tabs2{display:flex;background:var(--surf);border-radius:10px;padding:4px;margin-bottom:16px}
+.tabs2 button{flex:1;border:0;background:none;padding:10px;border-radius:8px;font-weight:700;color:var(--mute)}
+.tabs2 .on{background:var(--bg);color:var(--deep)}
+.chips{display:flex;gap:8px;padding:10px 14px;overflow-x:auto;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:20px;padding:6px 14px;white-space:nowrap;font-size:14px}
+.chip.on{background:var(--deep);color:var(--bg);border-color:var(--deep)}
+.map{position:relative;background:var(--map);flex:none}
+.map svg{display:block;width:100%;height:auto}
+.pin{cursor:pointer}
+.mini{position:absolute;left:10px;right:10px;bottom:10px;background:var(--bg);border-radius:14px;padding:12px;box-shadow:0 2px 10px rgba(0,0,0,.18);display:flex;gap:10px;align-items:center}
+.card{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+.dot{width:40px;height:48px;background:var(--blue);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;display:grid;place-items:center;flex:none;font-size:18px}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;background:var(--surf);color:var(--deep);margin:2px 4px 2px 0;border:1px solid var(--line)}
+.m{color:var(--mute);font-size:14px}.b{font-weight:700}
+.nav{display:flex;gap:8px;padding:8px 10px;border-top:1px solid var(--line);background:var(--bg);padding-bottom:8px}
+.nav button{flex:1;border:0;background:color-mix(in srgb,var(--gold) 45%,var(--bg));padding:8px 0 7px;border-radius:10px;font-size:12px;font-weight:700;color:var(--goldink);display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav .on{background:var(--gold);box-shadow:inset 0 0 0 2px var(--deep)}.nav span{display:flex}
+.lock{background:var(--surf);border:1px dashed var(--blue);border-radius:12px;padding:16px;text-align:center;margin:12px 0}
+.star{font-size:30px;border:0;background:none;color:var(--line);padding:0 2px}.star.on{color:#e0a82e}
+.rv{padding:10px 0;border-bottom:1px solid var(--line)}
+.modal{position:absolute;inset:0;background:rgba(10,20,28,.5);display:flex;align-items:flex-end;z-index:5}
+.sheet{background:var(--bg);width:100%;border-radius:18px 18px 0 0;padding:18px 16px}
+#toast{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);background:var(--deep);color:var(--bg);padding:10px 18px;border-radius:20px;font-size:14px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88%;text-align:center}
+#toast.on{opacity:1}
+.note{font-size:12px;color:var(--mute);text-align:center;padding:8px}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+#mp{touch-action:none;cursor:grab;user-select:none}.zb{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:3}.zb button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:22px;font-weight:700;color:var(--deep);padding:0}
+.leg{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:3px;background:color-mix(in srgb,var(--bg) 90%,transparent);padding:6px 9px;border-radius:8px;font-size:11px;z-index:1000;color:var(--ink)}.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.mini{align-items:flex-start!important}.mini .col{display:flex;flex-direction:column;gap:8px;align-items:flex-end}.info{display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:6px 10px;margin-top:8px;font-size:14px}.info .m{font-size:11px}
+.map #mp{height:min(66vh,580px)}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}a.btn.w{display:flex}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>.map .mini{z-index:1000}.map .leaflet-container svg{width:auto;height:auto}.leaflet-container{font-family:inherit;background:#f7f1e3}
+.tl{background:#f7f1e3;border:1px solid #cdbf9a;color:#3f5f73;font-weight:700;font-size:11px;padding:1px 6px;box-shadow:none}.tl:before{display:none}
+.lm span{font-size:12px;font-weight:700;color:#6f7a4a;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff}.ts{color:#8a6508}.leaflet-tile-pane{filter:grayscale(.55) sepia(.35) saturate(.8) brightness(1.06) contrast(.9)}.leaflet-control-attribution{font-size:10px}</style>
+</head>
+<body>
+<div id="app"><div id="v" class="scr"></div><div id="nv"></div><div id="toast"></div></div>
+<script>
+const T=[
+{id:1,n:"全家 靜宜大學店 顧客廁所",lat:24.2282671,lng:120.5799057,ac:0,fr:0,op:"06:00–22:00",st:"整潔・無人排隊",r:4.2,mf:"共用 1 間",pp:1,rv:[]},
+{id:2,n:"7-ELEVEN 中棲門市 顧客廁所",lat:24.2268164,lng:120.5758777,ac:0,fr:0,op:"24 小時",st:"整潔・稍有排隊",r:3.9,mf:"共用 1 間",pp:1,rv:[]},
+{id:3,n:"7-ELEVEN 錦文門市 顧客廁所",lat:24.2241121,lng:120.5797103,ac:0,fr:0,op:"24 小時",st:"整潔・無人排隊",r:3.8,mf:"共用 1 間",pp:1,rv:[]},
+{id:4,n:"沙鹿深波圖書館 廁所",lat:24.2333786,lng:120.5641751,ac:1,fr:1,op:"週二至週六 08:30–21:00・週日 08:30–17:30（週一休館）",st:"整潔・無人排隊",r:4.5,mf:"男女分設",pp:1,rv:[]},
+{id:5,n:"沙鹿區兒童公園公廁",lat:24.2290817,lng:120.5700386,ac:1,fr:1,op:"24 小時",st:"整潔・無人排隊",r:3.5,mf:"男女分設",pp:0,rv:[]},
+{id:6,n:"沙鹿區青年公園公廁",lat:24.2217443,lng:120.5734171,ac:0,fr:1,op:"24 小時",st:"整潔・無人排隊",r:3.6,mf:"男女分設",pp:0,rv:[]},
+{id:7,n:"沙鹿區青山公園公廁",lat:24.2259699,lng:120.5678335,ac:0,fr:1,op:"24 小時",st:"整潔・無人排隊",r:3.7,mf:"男女分設",pp:0,rv:[]},
+{id:8,n:"鎮立公園公廁",lat:24.2347111,lng:120.565631,ac:1,fr:1,op:"24 小時",st:"整潔・無人排隊",r:3.9,mf:"男女分設",pp:0,rv:[]}];
+const S=[{n:"全家 靜宜大學店",lat:24.2282671,lng:120.5799057,h:"06:00–22:00",t:"便利商店"},{n:"7-ELEVEN 中棲門市",lat:24.2268164,lng:120.5758777,h:"24 小時",t:"便利商店"},{n:"7-ELEVEN 錦文門市",lat:24.2241121,lng:120.5797103,h:"24 小時",t:"便利商店"},{n:"7-ELEVEN 北勢東門市",lat:24.2244586,lng:120.5764949,h:"24 小時",t:"便利商店"},{n:"7-ELEVEN 頂尖門市",lat:24.229073,lng:120.5736729,h:"24 小時",t:"便利商店"},{n:"7-ELEVEN 弘光門市",lat:24.2220213,lng:120.5802697,h:"24 小時",t:"便利商店"}];
+const C0=[24.2260,120.5780],ll=o=>[o.lat,o.lng],cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const hav=o=>{const r=Math.PI/180,a=Math.sin((o.lat-C0[0])*r/2)**2+Math.cos(C0[0]*r)*Math.cos(o.lat*r)*Math.sin((o.lng-C0[1])*r/2)**2;return Math.round(12742000*Math.asin(Math.sqrt(a)))};
+[...T,...S].forEach(o=>{let x=(o.lng-C0[1])/0.0000113,y=-(o.lat-C0[0])/0.0000103,r=Math.hypot(x,y);if(r>380){const k=(380+(r-380)*.3)/r;x*=k;y*=k}o.x=cl(180+x,-380,740);o.y=cl(200+y,-280,680);o.d=hav(o)});
+S.sort((a,b)=>a.d-b.d);
+const FL=[["ac","無障礙"],["fr","免費"],["near","500 公尺內"]];
+let st={ss:null,vb:[0,0,360],scr:"splash",user:null,tab:"map",sel:null,fl:new Set(),fav:new Set([1]),cur:null,auth:"in",nick:"小安",tel:"0912-345-678",modal:null,stars:0,rt:"維修中"};
+const $=s=>document.querySelector(s),v=$("#v");
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),1800)}
+function go(s,o={}){Object.assign(st,o,{scr:s});draw()}
+function need(f){if(st.user)return f();toast("此功能需會員登入");go("auth",{auth:"in"})}
+function list(){return T.filter(t=>[...st.fl].every(k=>k=="near"?t.d<=500:t[k])).sort((a,b)=>a.d-b.d)}
+const min=d=>Math.max(1,Math.round(d/70));
+const sn=t=>t.n.replace(/ ?[12]F| ?顧客廁所|廁所$|^沙鹿區|門市/g,'');
+const IC=p=>`<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${p}</svg>`;
+const WC=n=>`<svg width="${n}" height="${n}" viewBox="-4 0 108 110" fill="#fff" aria-hidden="true"><rect x="2" y="8" width="36" height="7" rx="3"/><rect x="18" y="3" width="14" height="5" rx="2.5"/><rect x="4" y="16" width="32" height="50" rx="3"/><rect x="40" y="48" width="52" height="8" rx="4"/><path d="M38 60H94C99 60 98 70 93 78C88 86 78 88 76 94C75 99 78 104 84 105L86 108H46C44 98 46 90 44 86C38 80 28 76 26 70V66H38Z"/></svg>`;
+const STAR=f=>ICONS.fav.replace('fill="none"',f?'fill="currentColor"':'fill="none"');
+const ICONS={map:IC('<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/>'),store:IC('<path d="M4 9l1.5-5h13L20 9v11H4Z"/><path d="M4 9c0 2 3 2 4 0 1 2 3 2 4 0 1 2 3 2 4 0 1 2 4 2 4 0"/><path d="M10 20v-5h4v5"/>'),fav:IC('<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>'),me:IC('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>')};
+function tags(t){return `${t.ac?'<span class="tag">無障礙</span>':''}<span class="tag">${t.fr?'免費':'需消費'}</span>`}
+const LEG='<div class="leg"><span><i style="background:#7ba3bd"></i>廁所</span><span><i style="background:#b8860b"></i>救急店家</span><span><i style="background:#e4572e"></i>我的位置</span></div>';
+const navUrl=o=>"https://www.google.com/maps/dir/?api=1&travelmode=walking&destination="+(typeof ll=="function"?ll(o).join(","):encodeURIComponent((o.id?"靜宜大學 ":"")+o.n));
+function card(t){return `<button class="card" data-open="${t.id}"><div class="dot">${WC(26)}</div><div style="flex:1"><div class="b">${t.n}</div><div class="m">${t.d} 公尺・步行約 ${min(t.d)} 分鐘</div><div>${tags(t)}</div></div><div class="m">★ ${t.r}</div></button>`}
+function mapSvg(sel,route){return '<div id="lmap" data-sel="'+(sel||'')+'" data-route="'+(route?route.id:'')+'" style="height:min(66vh,580px)"></div>'+LEG}
+const C=C0;
+function initMap(){const el=document.getElementById('lmap');if(!el||!window.L)return;
+const rid=el.dataset.route,sel=el.dataset.sel,pts=[C],sv=st.lv&&!rid;
+const m=L.map(el,{minZoom:14}).setView(sv?st.lv[0]:C,sv?st.lv[1]:16);
+const tl=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(m);let fe=0;
+tl.on('tileerror',()=>{if(++fe!=3)return;m.removeLayer(tl);L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(m)});
+if(!rid)L.circle(C,{radius:500,color:'#c9b98f',weight:2,dashArray:'6 6',fill:false,interactive:false}).addTo(m);
+L.circleMarker(C,{radius:8,color:'#fff',weight:3,fillColor:'#e4572e',fillOpacity:1}).addTo(m).bindTooltip('你的位置（示意）');
+[['靜宜大學',[24.2273,120.5780]]].forEach(a=>L.marker(a[1],{interactive:false,icon:L.divIcon({className:'lm',html:'<span>'+a[0]+'</span>',iconSize:[70,16],iconAnchor:[35,8]})}).addTo(m));
+S.forEach(o=>{L.marker(ll(o),{icon:L.divIcon({className:'',iconSize:[26,34],iconAnchor:[-2,34],tooltipAnchor:[15,4],html:'<svg width="26" height="34" viewBox="-16 -36 32 38"><path d="M0 0C-14-16-16-30 0-34C16-30 14-16 0 0Z" fill="#b8860b" stroke="#fff" stroke-width="2"/><path d="M-6-24h12l-1.5 9h-9z" fill="none" stroke="#fff" stroke-width="1.5"/></svg>'})}).addTo(m).bindTooltip(o.n.replace('門市','').replace('7-ELEVEN','7-11'),{permanent:true,direction:'bottom',className:'tl ts'}).on('click',()=>{st.ss=S.indexOf(o);st.sel=null;draw()})});
+list().forEach(t=>{if(rid&&t.id!=rid)return;const on=sel==t.id;
+const mk=L.marker(ll(t),{icon:L.divIcon({className:'',iconSize:[30,38],iconAnchor:[15,38],tooltipAnchor:[0,-34],html:'<svg width="30" height="38" viewBox="-16 -36 32 38"><path d="M0 0C-14-16-16-30 0-34C16-30 14-16 0 0Z" fill="'+(on?'#3f5f73':'#7ba3bd')+'" stroke="#fff" stroke-width="2"/></svg>'})}).addTo(m);
+mk.bindTooltip(sn(t),{permanent:true,direction:'top',className:'tl'});
+mk.on('click',()=>{st.sel=t.id;st.ss=null;draw()});pts.push(ll(t))});
+if(rid){const fb=L.polyline(pts,{color:'#e0a82e',weight:5,dashArray:'2 8'}).addTo(m);m.fitBounds(pts,{padding:[40,40],maxZoom:18});
+const a=pts[0],b=pts[1];
+fetch('https://routing.openstreetmap.de/routed-foot/route/v1/foot/'+a[1]+','+a[0]+';'+b[1]+','+b[0]+'?overview=full&geometries=geojson').then(r=>r.json()).then(j=>{const rt=j.routes&&j.routes[0];if(!rt||!document.body.contains(el))return;m.removeLayer(fb);const ln=L.geoJSON(rt.geometry,{style:{color:'#e0a82e',weight:6}}).addTo(m);m.fitBounds(ln.getBounds(),{padding:[40,40],maxZoom:18});const e=document.getElementById('eta'),d=document.getElementById('dst');if(e)e.textContent=Math.max(1,Math.round(rt.duration/60))+' 分鐘';if(d)d.textContent='・ '+Math.round(rt.distance)+' 公尺・步行'}).catch(()=>{})}
+else m.on('moveend',()=>{st.lv=[m.getCenter(),m.getZoom()]})}
+function mapSvgOld(sel,route){
+ const pins=T.filter(t=>list().includes(t)).map(t=>`<g class="pin" data-pin="${t.id}" style="transform:translate(${t.x}px,${t.y}px) scale(var(--k))" tabindex="0" role="button" aria-label="${t.n}"><path d="M0 0C-14-16-16-30 0-34C16-30 14-16 0 0Z" fill="${sel==t.id?'#3f5f73':'#7ba3bd'}" stroke="#fff" stroke-width="2"/><rect x="-5" y="-26" width="10" height="7" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/><text y="-40" text-anchor="middle" font-size="10" font-weight="700" fill="#3f5f73" stroke="#f7f1e3" stroke-width="3" paint-order="stroke">${sn(t)}</text></g>`).join("");
+ let vb=st.vb;if(route){const x0=Math.min(180,route.x),x1=Math.max(180,route.x),y0=Math.min(200,route.y),y1=Math.max(200,route.y),w=Math.max(x1-x0+160,(y1-y0+160)*360/290,200);vb=[(x0+x1)/2-w/2,(y0+y1)/2-w*290/720,w]}
+ const r=route?`<path d="M180 200 L180 150 L${route.x} 150 L${route.x} ${route.y}" fill="none" stroke="#e0a82e" stroke-width="${5*vb[2]/360}" stroke-dasharray="2 8" stroke-linecap="round"/>`:"";
+ return `<svg id="mp" viewBox="${vb[0]} ${vb[1]} ${vb[2]} ${vb[2]*290/360}" style="--k:${vb[2]/360}" role="img" aria-label="靜宜大學周邊示意地圖"><rect x="-400" y="-300" width="1160" height="1000" fill="var(--map)"/><rect x="20" y="30" width="170" height="105" rx="10" fill="var(--green)"/><text x="105" y="22" font-size="11" fill="#8a7f66" text-anchor="middle">靜宜大學（示意）</text>
+ <g stroke="var(--road)" stroke-width="14" fill="none"><path d="M-400 150H760"/><path d="M200 -300V700"/><path d="M-400 250H760"/><path d="M270 150V700"/><path d="M-400 450H760"/><path d="M-100 -300V700"/><path d="M520 -300V700"/></g><text x="300" y="146" font-size="10" fill="#8a7f66">台灣大道</text>
+ <circle cx="180" cy="200" r="435" fill="none" stroke="#c9b98f" stroke-width="2" stroke-dasharray="8 8"/><text x="180" y="-241" text-anchor="middle" font-size="12" fill="#8a7f66">500 公尺範圍</text>${r}${pins}
+ <g style="transform:translate(180px,200px) scale(var(--k))"><circle r="16" fill="#e4572e" opacity=".25"/><circle r="7" fill="#e4572e" stroke="#fff" stroke-width="2.5"/></g></svg><div class="zb"><button data-z="0.6" aria-label="放大">+</button><button data-z="1.6" aria-label="縮小">−</button></div>`}
+function navbar(){const m=st.user,a=[["map",ICONS.map,"地圖"],["store",ICONS.store,"救急店家"],["fav",ICONS.fav,"收藏"],["me",ICONS.me,m?"我的":"登入"]];
+ $("#nv").innerHTML=["map","detail","route","store","fav","me"].includes(st.scr)?`<div class="nav">${a.map(x=>`<button data-tab="${x[0]}" class="${st.tab==x[0]&&["map","store","fav","me"].includes(st.scr)?'on':''}"><span>${x[1]}</span>${x[2]}</button>`).join("")}</div>`:""}
+const V={
+splash:()=>`<svg width="190" height="230" viewBox="0 0 190 230" role="img" aria-label="PeeU 標誌"><path d="M95 0C42 0 0 42 0 95c0 70 95 135 95 135s95-65 95-135C190 42 148 0 95 0Z" fill="#7ba3bd"/><circle cx="95" cy="92" r="62" fill="#fff" opacity=".16"/><g transform="translate(55 44) scale(.78)" fill="#fff"><rect x="2" y="8" width="36" height="7" rx="3"/><rect x="18" y="3" width="14" height="5" rx="2.5"/><rect x="4" y="16" width="32" height="50" rx="3"/><rect x="40" y="48" width="52" height="8" rx="4"/><path d="M38 60H94C99 60 98 70 93 78C88 86 78 88 76 94C75 99 78 104 84 105L86 108H46C44 98 46 90 44 86C38 80 28 76 26 70V66H38Z"/></g></svg><h1>PeeU</h1><div style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:12px"><button class="btn w" data-go="auth">Login / Sign in</button><button class="btn s w" data-guest>訪客</button></div>`,
+auth:()=>`<div class="top"><button class="ib" data-go="splash" aria-label="返回">‹</button><h2>${st.auth=="in"?"會員登入":"註冊會員"}</h2></div><div class="pad"><div class="tabs2"><button data-au="in" class="${st.auth=='in'?'on':''}">登入</button><button data-au="up" class="${st.auth=='up'?'on':''}">註冊</button></div>
+ ${st.auth=="up"?'<label>暱稱</label><input id="f1" placeholder="例如：小安">':''}<label>Email</label><input id="f2" type="email" placeholder="you@example.com"><label>密碼</label><input id="f3" type="password" placeholder="至少 8 個字元"><button class="btn w" data-submit>${st.auth=="in"?"登入":"建立帳號"}</button><p class="note">店家與管理員請由後台入口登入（本雛形未含）</p></div>`,
+map:()=>{const L=list(),s=T.find(t=>t.id==st.sel),o=st.ss!=null?S[st.ss]:null;return `<div class="top"><div class="dot" style="width:28px;height:34px">${WC(16)}</div><h2>PeeU</h2><span class="m">${st.user?'會員：'+st.nick:'訪客'}</span></div><div class="map">${mapSvg(st.sel)}${s?`<div class="mini"><div style="flex:1;min-width:0"><div class="b">${s.n}</div><div class="m">${s.d} 公尺・步行約 ${min(s.d)} 分鐘・★ ${s.r}</div><div class="info"><div><div class="m">環境狀況</div><span style="${/維修/.test(s.st)?'color:var(--warn);font-weight:700':''}">${s.st}</span></div><div><div class="m">費用</div>${s.fr?'免費':'需消費'}</div><div><div class="m">無障礙</div>${s.ac?'有':'無'}</div></div></div><div class="col"><button class="ib" data-close aria-label="關閉">✕</button><button class="btn" data-open="${s.id}">查看</button><a class="btn s" style="padding:8px 12px;min-height:40px" href="${navUrl(s)}" target="_blank" rel="noopener">導航</a></div></div>`:''}${o?`<div class="mini"><div style="flex:1;min-width:0"><div class="b">${o.n}</div><div class="m">${o.t}・${o.d} 公尺・步行約 ${min(o.d)} 分鐘</div><div class="m">營業 ${o.h}</div></div><div class="col"><button class="ib" data-close aria-label="關閉">✕</button><a class="btn" href="${navUrl(o)}" target="_blank" rel="noopener">導航</a></div></div>`:''}</div>
+ <div class="pad m" style="padding-bottom:4px">附近 ${L.length} 間廁所（依距離排序）</div><div class="chips">${FL.map(f=>`<button class="chip ${st.fl.has(f[0])?'on':''}" data-fl="${f[0]}">${f[1]}</button>`).join("")}</div>${L.length?L.map(card).join(""):'<div class="lock">附近沒有符合條件的廁所<br><span class="m">請取消部分篩選條件</span></div>'}`},
+detail:()=>{const t=T.find(x=>x.id==st.cur),f=st.fav.has(t.id);return `<div class="top"><button class="ib" data-go="map" aria-label="返回">‹</button><h2>${t.n}</h2><button class="ib" data-fav="${t.id}" aria-label="收藏">${STAR(f)}</button></div><div class="pad"><div>${tags(t)}</div><p class="m" style="margin:8px 0">${t.d} 公尺・步行約 ${min(t.d)} 分鐘</p>
+ <button class="btn w" data-go="route">規劃路徑・導航</button>
+ ${st.user?`<div style="margin-top:16px"><div class="b">開放時間</div><div class="m">${t.op}</div><div class="b" style="margin-top:8px">男女廁</div><div class="m">${t.mf}</div><div class="b" style="margin-top:8px">即時狀態</div><div class="m">${t.st}・${t.pp?'有':'無'}提供衛生紙</div>
+ <div class="row" style="margin:16px 0"><button class="btn s" data-m="rate">★ 新增評論</button><button class="btn s" data-m="rep">回報問題</button></div>
+ <div class="b">評論（★ ${t.r}）</div>${t.rv.length?t.rv.map(r=>`<div class="rv"><span class="b">${r[0]}</span> <span style="color:#e0a82e">${"★".repeat(r[2])}</span><div class="m">${r[1]}</div></div>`).join(""):'<div class="m" style="padding:10px 0">還沒有評論，成為第一個留言的人</div>'}</div>`:`<div class="lock"><div class="b">登入後可查看完整資訊</div><div class="m" style="margin:4px 0 12px">開放時間、設備狀態、評分與留言僅提供會員</div><button class="btn" data-go="auth">登入／註冊</button></div>`}</div>`},
+route:()=>{const t=T.find(x=>x.id==st.cur);return `<div class="top"><button class="ib" data-go="detail" aria-label="返回">‹</button><h2>路徑規劃</h2></div><div class="map">${mapSvg(t.id,t)}</div><div class="pad"><div class="b" style="font-size:18px">${t.n}</div><div style="margin:8px 0 16px"><span id="eta" class="b" style="font-size:26px;color:var(--deep)">${min(t.d)} 分鐘</span> <span id="dst" class="m">・ ${t.d} 公尺・步行（估算）</span></div><a class="btn w" href="${navUrl(t)}" target="_blank" rel="noopener">開啟 Google Maps 導航</a></div>`},
+store:()=>`<div class="top"><h2>附近救急店家</h2></div><div class="pad m" style="padding-bottom:0">需要衛生紙或生理用品？以下店家可以補給</div>${st.user?S.map(s=>`<div class="card"><div class="dot" style="background:var(--gold);color:var(--goldink)">${ICONS.store}</div><div style="flex:1"><div class="b">${s.n}</div><div class="m">${s.t}・${s.d} 公尺・營業 ${s.h}</div></div><a class="btn" style="padding:8px 12px;min-height:40px" href="${navUrl(s)}" target="_blank" rel="noopener">導航</a></div>`).join(""):`<div class="pad"><div class="lock"><div class="b">會員專屬功能</div><div class="m" style="margin:4px 0 12px">登入後可查看周邊店家與營業資訊</div><button class="btn" data-go="auth">登入／註冊</button></div></div>`}`,
+fav:()=>{const L=T.filter(t=>st.fav.has(t.id));return `<div class="top"><h2>收藏清單</h2></div>${st.user?(L.length?L.map(card).join(""):'<div class="pad"><div class="lock">還沒有收藏<br><span class="m">在廁所詳情點星星圖示加入常用地點</span></div></div>'):`<div class="pad"><div class="lock"><div class="b">登入後可收藏常用廁所</div><button class="btn" style="margin-top:12px" data-go="auth">登入／註冊</button></div></div>`}`},
+me:()=>st.user?`<div class="top"><h2>個人資料</h2></div><div class="pad"><label>暱稱</label><input id="n1" value="${st.nick}"><label>手機</label><input id="n2" value="${st.tel}"><button class="btn w" data-save>儲存修改</button><button class="btn s w" style="margin-top:12px" data-out>登出</button></div>`:`<div class="top"><h2>登入</h2></div><div class="pad"><div class="lock"><div class="b">你正在以訪客身分使用</div><button class="btn" style="margin-top:12px" data-go="auth">登入／註冊</button></div></div>`};
+function modal(){let h="";if(st.modal=="rate")h=`<div class="b" style="font-size:18px">新增評論</div><div style="margin:8px 0">${[1,2,3,4,5].map(i=>`<button class="star ${st.stars>=i?'on':''}" data-st="${i}" aria-label="${i} 星">★</button>`).join("")}</div><div class="m" style="margin-bottom:6px">${st.stars?"已選 "+st.stars+" 星":"請點選星星評分"}</div><textarea id="tx" rows="3" maxlength="100" placeholder="分享整潔度、是否排隊…（100 字內）"></textarea><div class="row"><button class="btn s" data-m="">取消</button><button class="btn" data-send="rate">送出</button></div>`;
+ if(st.modal=="rep")h=`<div class="b" style="font-size:18px">回報問題</div><div class="chips" style="padding:10px 0">${["不開放","維修中","資訊錯誤"].map(x=>`<button class="chip ${st.rt==x?'on':''}" data-rt="${x}">${x}</button>`).join("")}</div><textarea id="tx" rows="3" placeholder="補充說明"></textarea><div class="row"><button class="btn s" data-m="">取消</button><button class="btn" data-send="rep">送出回報</button></div>`;
+ return h?`<div class="modal"><div class="sheet">${h}</div></div>`:""}
+function draw(){const sc=["map","store","fav","me"].includes(st.scr);if(sc)st.tab=st.scr;v.className="scr"+(st.scr=="splash"?" splash":"");v.innerHTML=V[st.scr]()+"";navbar();initMap();const o=$(".modal");if(o)o.remove();if(st.modal)$("#app").insertAdjacentHTML("beforeend",modal())}
+document.addEventListener("click",e=>{const g=a=>e.target.closest("["+a+"]"),q=a=>{const n=g("data-"+a);return n?n.dataset[a]:null};
+ let x;
+ if(e.target.classList&&e.target.classList.contains("modal")){st.modal=null;return draw()}
+ if(Date.now()-(window.__drag||0)<250&&e.target.closest("#mp"))return;
+ if((x=q("z"))!==null){const s=$("#mp"),r=s.getBoundingClientRect();return zoomAt(s,+x,r.left+r.width/2,r.top+r.height/2)}
+ if(g("data-close")){st.sel=null;st.ss=null;return draw()}
+ if((x=q("store"))!==null){st.ss=+x;st.sel=null;return draw()}
+ if((x=q("tab"))!==null)return go(x);
+ if(g("data-guest"))return go("map",{user:null});
+ if((x=q("go"))!==null)return go(x);
+ if((x=q("au"))!==null)return go("auth",{auth:x});
+ if(g("data-submit")){const em=$("#f2").value,pw=$("#f3").value;if(!/\S+@\S+\.\S+/.test(em))return toast("請輸入正確的 Email");if(pw.length<8)return toast("密碼至少 8 個字元");
+  if(st.auth=="up"){const n=$("#f1").value.trim();if(!n)return toast("請輸入暱稱");st.nick=n;toast("註冊成功，請登入");return go("auth",{auth:"in"})}
+  toast("登入成功");return go("map",{user:1})}
+ if((x=q("fl"))!==null){st.fl.has(x)?st.fl.delete(x):st.fl.add(x);st.sel=null;return draw()}
+ if((x=q("pin"))!==null){st.sel=+x;st.ss=null;return draw()}
+ if((x=q("open"))!==null)return go("detail",{cur:+x});
+ if((x=q("fav"))!==null){return need(()=>{const i=+x;st.fav.has(i)?(st.fav.delete(i),toast("已取消收藏")):(st.fav.add(i),toast("已加入收藏"));draw()})}
+ if(g("data-m")&&(x=q("m"))!==null){if(x&&!st.user)return need();st.modal=x||null;st.stars=0;return draw()}
+ if((x=q("st"))!==null){st.stars=+x;const tx=$("#tx")?.value;draw();$("#tx").value=tx||"";return}
+ if((x=q("rt"))!==null){st.rt=x;const tx=$("#tx").value;draw();$("#tx").value=tx;return}
+ if((x=q("send"))!==null){if(x=="rate"&&!st.stars)return toast("請先選擇星等");if(x=="rate"&&$("#tx").value.length>100)return toast("內容過長");if(x=="rate"){const t=T.find(z=>z.id==st.cur),tx=$("#tx").value.trim();t.r=+((t.r*t.rv.length+st.stars)/(t.rv.length+1)).toFixed(1);t.rv.unshift([st.nick,tx||"（未留言）",st.stars])}st.modal=null;toast(x=="rate"?"評論已送出":"感謝回報，狀態：待處理");return draw()}
+ if(g("data-save")){if(!/^[0-9\-]{8,}$/.test($("#n2").value))return toast("手機格式錯誤");st.nick=$("#n1").value||st.nick;st.tel=$("#n2").value;return toast("修改成功")}
+ if(g("data-out"))return go("splash",{user:null});
+ if((x=q("toast"))!==null)return toast(x)});
+const pt=new Map();let g=null;
+const vbOf=s=>s.getAttribute("viewBox").split(" ").map(Number);
+function setVb(s,x,y,w){w=Math.min(1160,Math.max(120,w));const h=w*290/360;x=Math.min(760-w,Math.max(-400,x));y=Math.min(700-h,Math.max(-300,y));s.setAttribute("viewBox",x+" "+y+" "+w+" "+h);s.style.setProperty("--k",w/360);if(st.scr=="map")st.vb=[x,y,w]}
+function zoomAt(s,f,px,py){const r=s.getBoundingClientRect(),[x,y,w]=vbOf(s),u=w/r.width,cx=x+(px-r.left)*u,cy=y+(py-r.top)*u;setVb(s,cx-(cx-x)*f,cy-(cy-y)*f,w*f)}
+document.addEventListener("pointerdown",e=>{const s=e.target.closest("#mp");if(!s)return;pt.set(e.pointerId,[e.clientX,e.clientY]);g={s,moved:0}});
+addEventListener("pointermove",e=>{if(!g||!pt.has(e.pointerId))return;const s=g.s,[x,y,w]=vbOf(s),u=w/s.getBoundingClientRect().width,o=pt.get(e.pointerId);
+ if(pt.size==2){const a=[...pt.values()],d0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);pt.set(e.pointerId,[e.clientX,e.clientY]);const c=[...pt.values()],d1=Math.hypot(c[0][0]-c[1][0],c[0][1]-c[1][1]);g.moved=99;if(d0&&d1)zoomAt(s,d0/d1,(c[0][0]+c[1][0])/2,(c[0][1]+c[1][1])/2);return}
+ const dx=e.clientX-o[0],dy=e.clientY-o[1];g.moved+=Math.abs(dx)+Math.abs(dy);pt.set(e.pointerId,[e.clientX,e.clientY]);if(g.moved>6)setVb(s,x-dx*u,y-dy*u,w)});
+const up=e=>{pt.delete(e.pointerId);if(g&&g.moved>6)window.__drag=Date.now();if(!pt.size)g=null};
+addEventListener("pointerup",up);addEventListener("pointercancel",up);
+document.addEventListener("wheel",e=>{const s=e.target.closest("#mp");if(!s)return;e.preventDefault();zoomAt(s,e.deltaY>0?1.2:1/1.2,e.clientX,e.clientY)},{passive:false});
+draw();
+</script>
+</body>
+</html>
